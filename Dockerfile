@@ -102,5 +102,7 @@ RUN . ~/.bashrc
 
 RUN apt-get install -y supervisor
 
+RUN npm install --global yarn
+
 RUN yarn init -2
 RUN yarn set version 4.1.1
