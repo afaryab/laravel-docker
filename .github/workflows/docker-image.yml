@@ -28,3 +28,19 @@ jobs:
       # Push the Docker image to Docker Hub
       - name: Push Docker image
         run: docker push ahmadfaryabkokab/laravel-docker:latest
+
+      # Build the Docker image
+      - name: Build Docker image
+        run: docker build -t ahmadfaryabkokab/laravel-docker:8.3 .
+
+      # Push the Docker image to Docker Hub
+      - name: Push Docker image
+        run: docker push ahmadfaryabkokab/laravel-docker:8.3
+
+      # Build the Docker image
+      - name: Build Docker image
+        run: docker build -t ahmadfaryabkokab/laravel-docker:8.3.$(date +%s) .
+
+      # Push the Docker image to Docker Hub
+      - name: Push Docker image
+        run: docker push ahmadfaryabkokab/laravel-docker:8.3.$(date +%s)
