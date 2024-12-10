@@ -63,29 +63,6 @@ RUN docker-php-ext-install intl
 RUN docker-php-ext-install gmp
 
 #####################################
-# PHPRedis:
-#####################################
-RUN pecl install redis
-
-RUN docker-php-ext-enable redis
-
-
-#####################################
-# Mongo DB:
-#####################################
-RUN pecl install mongodb
-
-RUN docker-php-ext-enable mongodb
-
-#####################################
-# Imagick:
-#####################################
-
-RUN pecl install imagick
-
-RUN docker-php-ext-enable imagick
-
-#####################################
 # GD:
 #####################################
 
