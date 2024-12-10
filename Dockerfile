@@ -65,7 +65,9 @@ RUN docker-php-ext-install gmp
 #####################################
 # PHPRedis:
 #####################################
-RUN pecl install redis && docker-php-ext-enable redis
+RUN pecl install redis
+
+RUN docker-php-ext-enable redis
 
 
 #####################################
@@ -79,8 +81,9 @@ RUN docker-php-ext-enable mongodb
 # Imagick:
 #####################################
 
-RUN pecl install imagick && \
-    docker-php-ext-enable imagick
+RUN pecl install imagick
+
+RUN docker-php-ext-enable imagick
 
 #####################################
 # GD:
