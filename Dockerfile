@@ -1,8 +1,17 @@
 
-FROM php:8.3-fpm
+FROM ubuntu:20.04
 
-RUN apt-get update && \
-    apt-get install -y --force-yes --no-install-recommends \
+RUN apt-get update && apt-get install -y software-properties-common && \
+    add-apt-repository -y ppa:ondrej/php && apt-get update
+
+RUN apt-get update && apt-get install -y --force-yes --no-install-recommends \
+    build-essential \
+    php8.3 \
+    php8.3-fpm \
+    php8.3-cli \
+    php-pear \
+    php-dev \
+    nginx \
     libmemcached-dev \
     libzip-dev \
     libz-dev \
@@ -34,6 +43,13 @@ RUN apt-get update && \
     nasm \
     nodejs \
     npm
+
+RUN pear config-set php_ini /etc/php/8.3/fpm/php.ini
+
+COPY docker-php-ext-* /usr/local/bin/
+
+RUN docker-php-ext-enable sodium
+
 
 # Install soap extention
 RUN docker-php-ext-install soap
