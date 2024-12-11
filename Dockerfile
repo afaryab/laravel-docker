@@ -46,8 +46,6 @@ RUN apt-get update && apt-get install -y --force-yes --no-install-recommends \
 
 RUN pear config-set php_ini /etc/php/8.3/fpm/php.ini
 
-RUN docker-php-ext-enable sodium
-
 
 # Install soap extention
 RUN docker-php-ext-install soap
