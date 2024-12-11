@@ -46,10 +46,6 @@ RUN apt-get update && apt-get install -y --force-yes --no-install-recommends \
 
 RUN pear config-set php_ini /etc/php/8.3/fpm/php.ini
 
-COPY docker-php-source /usr/local/bin/
-
-COPY docker-php-ext-* /usr/local/bin/
-
 RUN docker-php-ext-enable sodium
 
 
