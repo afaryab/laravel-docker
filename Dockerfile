@@ -1,5 +1,5 @@
 
-FROM ubuntu:22.04
+FROM php:8.3-fpm
 
 RUN apt-get update && \
     apt-get install -y --force-yes --no-install-recommends \
@@ -33,9 +33,7 @@ RUN apt-get update && \
     python3 python3-pip \
     nasm \
     nodejs \
-    npm \
-    php8.3 php8.3-cli \
-    php8.3-fpm
+    npm
 
 # Install soap extention
 RUN docker-php-ext-install soap
