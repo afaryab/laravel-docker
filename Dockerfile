@@ -69,4 +69,5 @@ RUN apt-get install -y supervisor
 RUN npm install --global yarn
 
 RUN yarn init -y
+RUN yarn cache clean
 RUN yarn set version 4.1.1
