@@ -66,6 +66,15 @@ RUN . ~/.bashrc
 
 RUN apt-get install -y supervisor
 
+
+#####################################
+# NODE JS & YARN:
+#####################################
+
+RUN curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+
+RUN apt-get install -y nodejs
+
 RUN npm install --global yarn
 
 RUN yarn init -y
