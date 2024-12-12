@@ -42,61 +42,11 @@ RUN apt-get update && apt-get install -y --force-yes --no-install-recommends \
     python3 python3-pip \
     nasm \
     nodejs \
-    npm
+    npm \
+    openssl php8.3-bcmath php8.3-curl php8.3-mbstring php8.3-mysql php8.3-tokenizer php8.3-xml php8.3-zip php8.3-soap php8.3-exif php8.3-mysql \
+    php8.3-pgsql  php8.3-bcmath php8.3-intl php8.3-gmp
 
 RUN pear config-set php_ini /etc/php/8.3/fpm/php.ini
-
-RUN apt-get install openssl php8.3-bcmath php8.3-curl php8.3-json php8.3-mbstring php8.3-mysql php8.3-tokenizer php8.3-xml php8.3-zip
-
-# # Install soap extention
-# RUN docker-php-ext-install soap
-
-# # Install for image manipulation
-# RUN docker-php-ext-install exif
-
-# # Install the PHP pcntl extention
-# RUN docker-php-ext-install pcntl
-
-# # Install the PHP zip extention
-# RUN docker-php-ext-install zip
-
-# # Install the PHP pdo_mysql extention
-# RUN docker-php-ext-install pdo_mysql
-
-# # Install the PHP pdo_pgsql extention
-# RUN docker-php-ext-install pdo_pgsql
-
-# # Install the PHP bcmath extension
-# RUN docker-php-ext-install bcmath
-
-# # Install the PHP intl extention
-# RUN docker-php-ext-install intl
-
-# # Install the PHP gmp extention
-# RUN docker-php-ext-install gmp
-
-# #####################################
-# # GD:
-# #####################################
-
-# # Install the PHP gd library
-# RUN docker-php-ext-install gd && \
-#     docker-php-ext-configure gd --with-freetype --with-jpeg && \
-#     docker-php-ext-install gd
-
-# #####################################
-# # xDebug:
-# #####################################
-
-# # Install the xdebug extension
-# RUN pecl install xdebug
-
-# #####################################
-# # PHP Memcached:
-# #####################################
-
-# # Install the php memcached extension
-# RUN pecl install memcached && docker-php-ext-enable memcached
 
 #####################################
 # Composer:
