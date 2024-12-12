@@ -80,5 +80,3 @@ RUN npm install --global yarn
 RUN yarn init -y
 RUN yarn cache clean
 RUN yarn set version 4.1.1
-RUN npm install -g laravel-mix webpack laravel-vite-plugin vite
-RUN npm install -D webpack-cli
