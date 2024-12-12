@@ -44,7 +44,8 @@ RUN apt-get update && apt-get install -y --force-yes --no-install-recommends \
     nodejs \
     npm \
     openssl php8.3-bcmath php8.3-curl php8.3-mbstring php8.3-mysql php8.3-tokenizer php8.3-xml php8.3-zip php8.3-soap php8.3-exif php8.3-mysql \
-    php8.3-pgsql  php8.3-bcmath php8.3-intl php8.3-gmp
+    php8.3-pgsql  php8.3-bcmath php8.3-intl php8.3-gmp \
+    curl
 
 RUN pear config-set php_ini /etc/php/8.3/fpm/php.ini
 
