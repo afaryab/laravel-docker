@@ -71,7 +71,7 @@ RUN apt-get install -y supervisor
 # NODE JS & YARN:
 #####################################
 
-RUN curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 
 RUN apt-get install -y nodejs
 
