@@ -80,14 +80,3 @@ RUN npm install --global yarn
 RUN yarn init -y
 RUN yarn cache clean
 RUN yarn set version 4.1.1
-
-
-
-#####################################
-# Some Required Global Packages:
-#####################################
-
-RUN npm install -g laravel-mix webpack laravel-vite-plugin vite
-RUN npm install -D webpack-cli
-RUN yarn global add gatsby-cli@^5.11.0
-RUN yarn global add netlify-cli
