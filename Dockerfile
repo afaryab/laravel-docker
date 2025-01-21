@@ -4,7 +4,7 @@ FROM ubuntu:20.04
 RUN apt-get update && apt-get install -y software-properties-common && \
     add-apt-repository -y ppa:ondrej/php && apt-get update
 
-RUN apt-get update -y && apt upgrade && apt-get install -y --force-yes --no-install-recommends \
+RUN apt-get update -y && apt upgrade -y && apt-get install -y --force-yes --no-install-recommends \
     build-essential \
     php8.3 \
     php8.3-fpm \
