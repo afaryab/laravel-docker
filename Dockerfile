@@ -85,4 +85,9 @@ RUN yarn init -y
 RUN yarn cache clean
 RUN yarn set version 4.1.1
 
+RUN npm install -g pnpm
+RUN corepack enable && pnpm add -g gatsby-cli@^5.11.0 netlify-cli
+RUN gatsby --version && netlify --version
+
+
 RUN apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* || true
