@@ -50,6 +50,10 @@ RUN apt-get update -y && apt upgrade -y && apt-get install -y --force-yes --no-i
     sqlite3 \
     php8.3-sqlite3 \
     libsqlite3-dev tar
+
+# Enable corepack and install pnpm globally
+RUN apk add corepack enable \
+    && corepack prepare pnpm@latest --activate
     
 RUN pear config-set php_ini /etc/php/8.3/fpm/php.ini
 
