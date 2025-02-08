@@ -87,7 +87,9 @@ RUN yarn cache clean
 RUN yarn set version 4.1.1
 
 RUN npm install -g pnpm
-RUN pnpm add -g gatsby-cli@^5.11.0 netlify-cli
+
+RUN pnpm setup
+RUN pnpm add -g gatsby-cli netlify-cli
 RUN gatsby --version && netlify --version
 
 
