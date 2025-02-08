@@ -84,8 +84,8 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
 RUN apt-get install -y nodejs
 
 RUN corepack enable
+
 RUN npm install -g npm@11.1.0
-RUN npm install --global yarn
 
 RUN yarn init -y
 RUN yarn cache clean
