@@ -57,9 +57,6 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
 # Setup pnpm environment
 ENV PNPM_HOME="/root/.local/share/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-
-# Ensure PNPM_HOME is correctly set up
-RUN pnpm setup
     
 RUN pear config-set php_ini /etc/php/8.3/fpm/php.ini
 
