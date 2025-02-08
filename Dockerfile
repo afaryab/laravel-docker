@@ -85,4 +85,8 @@ RUN yarn init -y
 RUN yarn cache clean
 RUN yarn set version 4.1.1
 
+## I Love to work using these
+RUN npm install gatsby-cli@^5.11.0 --global
+RUN npm install netlify-cli --global
+
 RUN apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* || true
