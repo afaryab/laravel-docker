@@ -50,13 +50,7 @@ RUN apt-get update -y && apt upgrade -y && apt-get install -y --force-yes --no-i
     sqlite3 \
     php8.3-sqlite3 \
     libsqlite3-dev tar ca-certificates
-
-
-
-# Setup pnpm environment
-ENV PNPM_HOME="/root/.local/share/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-    
+ 
 RUN pear config-set php_ini /etc/php/8.3/fpm/php.ini
 
 #####################################
@@ -85,18 +79,19 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
 
 RUN apt-get install -y nodejs
 
-RUN corepack enable
-
 RUN npm install -g npm@11.1.0
 
 RUN yarn init -y
 RUN yarn cache clean
 RUN yarn set version 4.1.1
 
-RUN corepack install && corepack enable
+RUN npm install -g pnpm
 
+# Setup pnpm environment
+ENV PNPM_HOME="/root/.local/share/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+   
 RUN pnpm add -g gatsby-cli netlify-cli
 RUN gatsby --version && netlify --version
-
 
 RUN apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* || true
