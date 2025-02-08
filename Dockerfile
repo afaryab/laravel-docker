@@ -91,9 +91,8 @@ RUN yarn init -y
 RUN yarn cache clean
 RUN yarn set version 4.1.1
 
-RUN corepack prepare pnpm@latest --activate
+RUN corepack install && corepack enable
 
-RUN pnpm setup
 RUN pnpm add -g gatsby-cli netlify-cli
 RUN gatsby --version && netlify --version
 
