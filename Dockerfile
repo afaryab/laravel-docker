@@ -49,7 +49,7 @@ RUN apt-get update -y && apt upgrade -y && apt-get install -y --force-yes --no-i
     php8.3-gd \
     sqlite3 \
     php8.3-sqlite3 \
-    libsqlite3-dev
+    libsqlite3-dev tar
     
 RUN pear config-set php_ini /etc/php/8.3/fpm/php.ini
 
