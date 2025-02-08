@@ -41,18 +41,27 @@ RUN apt-get update -y && apt upgrade -y && apt-get install -y --force-yes --no-i
     libtool \
     python3 python3-pip \
     nasm \
-    nodejs \
-    npm \
     openssl php8.3-bcmath php8.3-curl php8.3-mbstring php8.3-mysql php8.3-tokenizer php8.3-xml php8.3-zip php8.3-soap php8.3-exif php8.3-mysql \
     php8.3-pgsql  php8.3-bcmath php8.3-intl php8.3-gmp \
     curl \
     php8.3-gd \
     sqlite3 \
     php8.3-sqlite3 \
-    libsqlite3-dev tar ca-certificates \
+    libsqlite3-dev tar ca-certificates
+
+# Install Node.js and enable corepack
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs npm \
     && corepack enable \
     && corepack prepare pnpm@latest --activate
 
+
+# Setup pnpm environment
+ENV PNPM_HOME="/root/.local/share/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
+# Ensure PNPM_HOME is correctly set up
+RUN pnpm setup
     
 RUN pear config-set php_ini /etc/php/8.3/fpm/php.ini
 
