@@ -1,6 +1,8 @@
 
 FROM ubuntu:20.04
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update && apt-get install -y software-properties-common && \
     add-apt-repository -y ppa:ondrej/php && apt-get update
 
@@ -90,6 +92,8 @@ RUN npm install -g npm@11.1.0
 RUN yarn init -y
 RUN yarn cache clean
 RUN yarn set version 4.1.1
+
+RUN npm install -g pnpm
 
 RUN corepack install && corepack enable
 
