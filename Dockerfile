@@ -83,13 +83,15 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
 
 RUN apt-get install -y nodejs npm
 
+RUN corepack enable
+
 RUN npm install --global yarn
 
 RUN yarn init -y
 RUN yarn cache clean
 RUN yarn set version 4.1.1
 
-RUN npm install -g pnpm
+RUN corepack prepare pnpm@latest --activate
 
 RUN pnpm setup
 RUN pnpm add -g gatsby-cli netlify-cli
