@@ -51,7 +51,7 @@ RUN apt-get update -y && apt upgrade -y && apt-get install -y --force-yes --no-i
 
 # Install Node.js and enable corepack
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs npm \
+    && apt-get install -y nodejs \
     && corepack enable \
     && corepack prepare pnpm@latest --activate
 
