@@ -49,16 +49,7 @@ RUN apt-get update -y && apt upgrade -y && apt-get install -y --force-yes --no-i
     php8.3-gd \
     sqlite3 \
     php8.3-sqlite3 \
-    libsqlite3-dev tar
-
-# Install dependencies
-RUN apt-get update && apt-get install -y ca-certificates
-
-# Install Node.js and pnpm
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs \
-    && corepack enable \
-    && corepack prepare pnpm@latest --activate
+    libsqlite3-dev tar ca-certificates
 
     
 RUN pear config-set php_ini /etc/php/8.3/fpm/php.ini
@@ -96,7 +87,7 @@ RUN yarn cache clean
 RUN yarn set version 4.1.1
 
 RUN npm install -g pnpm
-RUN corepack enable && pnpm add -g gatsby-cli@^5.11.0 netlify-cli
+RUN pnpm add -g gatsby-cli@^5.11.0 netlify-cli
 RUN gatsby --version && netlify --version
 
 
