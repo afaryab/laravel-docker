@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y software-properties-common && \
     add-apt-repository -y ppa:ondrej/php && apt-get update
-
+    
 RUN apt-get update -y && apt upgrade -y && apt-get install -y --force-yes --no-install-recommends \
     build-essential \
     php8.3 \
@@ -44,13 +44,29 @@ RUN apt-get update -y && apt upgrade -y && apt-get install -y --force-yes --no-i
     libtool \
     python3 python3-pip \
     nasm \
-    openssl php8.3-bcmath php8.3-curl php8.3-mbstring php8.3-mysql php8.3-tokenizer php8.3-xml php8.3-zip php8.3-soap php8.3-exif php8.3-mysql php8.3-opcache \
-    php8.3-pgsql  php8.3-bcmath php8.3-intl php8.3-gmp \
+    openssl \
     curl \
-    php8.3-gd \
     sqlite3 \
-    php8.3-sqlite3 \
     libsqlite3-dev tar ca-certificates
+    
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc)  \
+    gd \
+    bcmath \
+    curl \
+    mbstring \
+    mysqli \
+    tokenizer \
+    xml \
+    zip \
+    soap \
+    exif \
+    opcache \
+    pgsql \
+    bcmath \
+    intl \
+    gmp \
+    sqlite3
 
 
 RUN pear config-set php_ini /etc/php/8.3/fpm/php.ini
