@@ -24,6 +24,7 @@ RUN apt-get update -y && apt upgrade -y && apt-get install -y --force-yes --no-i
     libpng-dev \
     libfreetype6-dev \
     libssl-dev \
+    libvips-dev \
     openssh-server \
     libmagickwand-dev \
     git \
