@@ -15,6 +15,7 @@ RUN apt-get update -y && apt upgrade -y && apt-get install -y --force-yes --no-i
     php-dev \
     nginx \
     libmemcached-dev \
+    libfcgi-bin \
     libzip-dev \
     libz-dev \
     libzip-dev \
@@ -43,13 +44,14 @@ RUN apt-get update -y && apt upgrade -y && apt-get install -y --force-yes --no-i
     libtool \
     python3 python3-pip \
     nasm \
-    openssl php8.3-bcmath php8.3-curl php8.3-mbstring php8.3-mysql php8.3-tokenizer php8.3-xml php8.3-zip php8.3-soap php8.3-exif php8.3-mysql \
+    openssl php8.3-bcmath php8.3-curl php8.3-mbstring php8.3-mysql php8.3-tokenizer php8.3-xml php8.3-zip php8.3-soap php8.3-exif php8.3-mysql php8.3-opcache \
     php8.3-pgsql  php8.3-bcmath php8.3-intl php8.3-gmp \
     curl \
     php8.3-gd \
     sqlite3 \
     php8.3-sqlite3 \
     libsqlite3-dev tar ca-certificates
+
 
 RUN pear config-set php_ini /etc/php/8.3/fpm/php.ini
 
