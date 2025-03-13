@@ -74,6 +74,10 @@ RUN echo "zend_extension=opcache.so" > /etc/php/8.3/cli/conf.d/10-opcache.ini &&
     echo "opcache.max_accelerated_files=4000" >> /etc/php/8.3/cli/conf.d/10-opcache.ini && \
     echo "opcache.validate_timestamps=1" >> /etc/php/8.3/cli/conf.d/10-opcache.ini
 
+RUN echo "soap.wsdl_cache_dir=/tmp" > /etc/php/8.3/cli/conf.d/20-soap.ini
+
+RUN echo "exif.decode_unicode_motorola=1" > /etc/php/8.3/cli/conf.d/20-exif.ini
+
 RUN pear config-set php_ini /etc/php/8.3/fpm/php.ini
 
 #####################################
