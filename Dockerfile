@@ -79,6 +79,8 @@ RUN echo "soap.wsdl_cache_dir=/tmp" > /etc/php/8.3/cli/conf.d/20-soap.ini
 
 RUN echo "exif.decode_unicode_motorola=1" > /etc/php/8.3/cli/conf.d/20-exif.ini
 
+RUN echo "extension=exif" > /etc/php/8.3/cli/conf.d/20-exif.ini
+
 RUN pear config-set php_ini /etc/php/8.3/fpm/php.ini
 
 #####################################
