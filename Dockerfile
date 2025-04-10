@@ -48,7 +48,7 @@ RUN apt-get update -y && apt upgrade -y && apt-get install -y --force-yes --no-i
     openssl \
     curl \
     sqlite3 \
-    libsqlite3-dev tar ca-certificates
+    libsqlite3-dev tar ca-certificates \
     
 RUN apt-get install -y --no-install-recommends \
     php8.3-bcmath \
@@ -122,8 +122,7 @@ RUN npm install -g pnpm
 # Setup pnpm environment
 ENV PNPM_HOME="/root/.local/share/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-   
-RUN pnpm add -g gatsby-cli netlify-cli
-RUN gatsby --version && netlify --version
+
+RUN apt-get update -y update && apt-get certbot python3-certbot-apache -y
 
 RUN apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* || true
