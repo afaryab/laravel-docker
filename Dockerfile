@@ -66,7 +66,8 @@ RUN apt-get install -y --no-install-recommends \
     php8.3-gmp \
     php8.3-pgsql \
     php8.3-sqlite3 \
-    php8.3-cli
+    php8.3-cli \
+    php8.3-intl
 
 RUN echo "zend_extension=opcache.so" > /etc/php/8.3/cli/conf.d/10-opcache.ini && \
     echo "opcache.enable=1" >> /etc/php/8.3/cli/conf.d/10-opcache.ini && \
