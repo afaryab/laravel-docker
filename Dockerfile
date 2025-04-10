@@ -48,7 +48,7 @@ RUN apt-get update -y && apt upgrade -y && apt-get install -y --force-yes --no-i
     openssl \
     curl \
     sqlite3 \
-    libsqlite3-dev tar ca-certificates \
+    libsqlite3-dev tar ca-certificates
     
 RUN apt-get install -y --no-install-recommends \
     php8.3-bcmath \
