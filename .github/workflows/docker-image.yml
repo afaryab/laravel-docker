@@ -36,6 +36,6 @@ jobs:
             --build-arg BUILDKIT_INLINE_CACHE=1 \
             --compress \
             --push \
-            --platform linux/amd64 \
+            --platform linux/amd64,linux/arm64 \
             -t ahmadfaryabkokab/laravel-docker:latest \
             -t ahmadfaryabkokab/laravel-docker:8.4 .
