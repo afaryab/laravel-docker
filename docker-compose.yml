@@ -1,0 +1,113 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: app
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+    networks:
+      - server_manager
+    depends_on:
+      - mysql
+      - redis
+    restart: unless-stopped
+
+  mailtrap:
+    image: mailhog/mailhog
+    platform: linux/amd64
+    container_name: mailtrap
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - server_manager
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    networks:
+      - server_manager
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  mysql:
+    image: ahmadfaryabkokab/mysql8:0.2.0
+    init: true
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: password
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+      BACKUP_CRON: "0 * * * *"          # Every hour at minute 0
+      USAGE_CRON: "*/30 * * * *"          # Every half hour
+      PRUNE_CRON: "0 4 * * 0"           # Weekly cleanup on Sunday at 4 AM
+      RETAIN_DAYS: 1                    # Keep 1 day of backups
+      RETAIN_COUNT: 6                   # Keep max 6 backups
+    ports:
+      - "3306:3306"
+    networks:
+      - server_manager
+    restart: unless-stopped
+
+  pma:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: laravel
+      PMA_PASSWORD: password
+    ports:
+      - "3333:80"
+    networks:
+      - server_manager
+    restart: unless-stopped
+
+  soketi:
+    image: 'quay.io/soketi/soketi:1.4-16-alpine'
+    container_name: soketi
+    environment:
+      SOKETI_DEBUG: '1'
+      SOKETI_METRICS_SERVER_PORT: '9601'
+      SOKETI_DEFAULT_APP_ID: 'app-id'
+      SOKETI_DEFAULT_APP_KEY: 'app-key'
+      SOKETI_DEFAULT_APP_SECRET: 'app-secret'
+      SOKETI_DEFAULT_APP_ENABLE_CLIENT_MESSAGES: 'true'
+      SOKETI_DEFAULT_APP_ENABLED: 'true'
+      SOKETI_DEFAULT_APP_MAX_CONNECTIONS: '100'
+      SOKETI_DEFAULT_APP_MAX_BACKEND_EVENTS_PER_SEC: '100'
+      SOKETI_DEFAULT_APP_MAX_CLIENT_EVENTS_PER_SEC: '100'
+      SOKETI_DEFAULT_APP_MAX_READ_REQ_PER_SEC: '100'
+      # Allow all origins for development
+      SOKETI_CORS_ALLOWED_ORIGINS: '*'
+      SOKETI_CORS_ALLOWED_HEADERS: '*'
+      SOKETI_CORS_ALLOWED_METHODS: '*'
+    ports:
+      - '6001:6001'
+      - '9601:9601'
+    networks:
+      - server_manager
+    restart: unless-stopped
+
+  altair:
+    image: appwrite/altair:0.3.0
+    container_name: altair
+    ports:
+      - "3000:3000"
+    networks:
+      - server_manager
+    restart: unless-stopped
+
+networks:
+  server_manager:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
