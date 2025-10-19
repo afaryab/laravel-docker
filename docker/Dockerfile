@@ -25,7 +25,8 @@ RUN apk add --no-cache \
     make \
     dcron \
     nodejs \
-    npm
+    npm \
+    netcat-openbsd
 
 # Clear cache
 RUN rm -rf /var/lib/apt/lists/*
@@ -69,12 +70,13 @@ COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/default.conf /etc/nginx/conf.d/default.conf
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/start.sh /start.sh
+COPY docker/entrypoint.sh /entrypoint.sh
 
 # Create .htpasswd file
 RUN touch /etc/nginx/.htpasswd
 
-# Make start script executable
-RUN chmod +x /start.sh
+# Make scripts executable
+RUN chmod +x /start.sh /entrypoint.sh
 
 # Create required directories and set permissions before composer install
 RUN mkdir -p /var/www/html/bootstrap/cache /var/www/html/storage/app /var/www/html/storage/framework/cache /var/www/html/storage/framework/sessions /var/www/html/storage/framework/views /var/www/html/storage/logs
@@ -107,5 +109,5 @@ RUN mkdir -p /var/log/supervisor /var/log/nginx
 # Expose ports
 EXPOSE 80 443 22 9000
 
-# Start supervisor which will manage all services
-CMD ["/bin/sh", "/start.sh"]
+# Start with entrypoint that handles updates, then delegates to start.sh
+CMD ["/bin/sh", "/entrypoint.sh"]
