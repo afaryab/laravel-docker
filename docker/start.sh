@@ -10,6 +10,11 @@ cd /var/www/html
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
 
+# Create .env file if it doesn't exist
+if [ ! -f ".env" ] && [ -f ".env.example" ]; then
+    echo "Creating .env file from .env.example..."
+    cp .env.example .env
+fi
 
 # Install/update composer dependencies if enabled and composer.json exists
 if [ "${AUTO_INSTALL_COMPOSER:-true}" = "true" ] && [ -f "/var/www/html/composer.json" ]; then
