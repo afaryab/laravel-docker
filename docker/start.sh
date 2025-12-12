@@ -10,13 +10,6 @@ cd /var/www/html
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
 
-# Wait for database to be ready
-echo "Waiting for database to be ready..."
-until nc -z mysql 3306; do
-    echo "Waiting for MySQL to be ready..."
-    sleep 2
-done
-echo "Database is ready!"
 
 # Install/update composer dependencies if enabled and composer.json exists
 if [ "${AUTO_INSTALL_COMPOSER:-true}" = "true" ] && [ -f "/var/www/html/composer.json" ]; then
