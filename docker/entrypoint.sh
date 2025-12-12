@@ -17,21 +17,6 @@ if [ "${FORCE_UPDATE:-false}" = "true" ] || [ ! -f "/tmp/.container_initialized"
     chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
     chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
     
-    # Wait for database
-    echo "Waiting for database..."
-    timeout=60
-    while ! nc -z mysql 3306 && [ $timeout -gt 0 ]; do
-        echo "Waiting for MySQL... ($timeout seconds left)"
-        sleep 2
-        timeout=$((timeout-2))
-    done
-    
-    if [ $timeout -le 0 ]; then
-        echo "WARNING: Database not available after 60 seconds, continuing anyway..."
-    else
-        echo "Database is ready!"
-    fi
-    
     # Force composer install
     if [ -f "/var/www/html/composer.json" ]; then
         echo "=== RUNNING COMPOSER INSTALL ==="

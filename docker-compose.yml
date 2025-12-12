@@ -11,7 +11,7 @@ services:
     networks:
       - server_manager
     depends_on:
-      - mysql
+      - db
       - redis
     restart: unless-stopped
 
@@ -35,10 +35,9 @@ services:
     ports:
       - "6379:6379"
 
-  mysql:
+  db:
     image: ahmadfaryabkokab/mysql8:0.2.0
     init: true
-    container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: laravel
@@ -60,7 +59,7 @@ services:
     image: phpmyadmin/phpmyadmin
     container_name: pma
     environment:
-      PMA_HOST: mysql
+      PMA_HOST: db
       PMA_USER: laravel
       PMA_PASSWORD: password
     ports:
@@ -91,15 +90,6 @@ services:
     ports:
       - '6001:6001'
       - '9601:9601'
-    networks:
-      - server_manager
-    restart: unless-stopped
-
-  altair:
-    image: appwrite/altair:0.3.0
-    container_name: altair
-    ports:
-      - "3000:3000"
     networks:
       - server_manager
     restart: unless-stopped
