@@ -2,70 +2,84 @@
 
 echo "=== Laravel Docker Container Entrypoint ==="
 echo "Container started at: $(date)"
-echo "Container update trigger: ${CONTAINER_UPDATE_TRIGGER:-manual}"
+
+# Set working directory
+cd /var/www/html
+
+# Create .env file if it doesn't exist (do this first)
+if [ ! -f ".env" ] && [ -f ".env.example" ]; then
+    echo "Creating .env file from .env.example..."
+    cp .env.example .env
+fi
 
 # Check if this is a container update (rebuild/restart)
 if [ "${FORCE_UPDATE:-false}" = "true" ] || [ ! -f "/tmp/.container_initialized" ]; then
-    echo "=== CONTAINER UPDATE DETECTED ==="
-    echo "Running update procedures..."
+    echo "=== INITIALIZATION DETECTED ==="
+    echo "Running one-time setup procedures..."
     
-    # Set working directory
-    cd /var/www/html
-    
-    # Ensure proper permissions first
-    echo "Setting permissions..."
-    chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
-    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
-    
-    # Force composer install
+    # Install composer dependencies
     if [ -f "/var/www/html/composer.json" ]; then
-        echo "=== RUNNING COMPOSER INSTALL ==="
+        echo "=== Installing Composer dependencies ==="
         composer install --no-dev --optimize-autoloader --no-interaction || {
             echo "ERROR: Composer install failed!"
             exit 1
         }
-        echo "✓ Composer dependencies updated"
+        echo "✓ Composer dependencies installed"
     fi
     
-    # Force Laravel setup
+    # Laravel setup
     if [ -f "/var/www/html/artisan" ]; then
-        echo "=== RUNNING LARAVEL SETUP ==="
+        echo "=== Running Laravel setup ==="
         
-        # Clear all caches first
-        echo "Clearing caches..."
-        php artisan config:clear || true
-        php artisan route:clear || true
-        php artisan view:clear || true
-        php artisan cache:clear || true
-        
-        # Generate key if needed
+        # Generate app key if not exists
         if ! grep -q "APP_KEY=base64:" .env 2>/dev/null; then
             echo "Generating application key..."
             php artisan key:generate --force || true
         fi
         
+        # Clear old caches
+        echo "Clearing caches..."
+        php artisan config:clear 2>/dev/null || true
+        php artisan route:clear 2>/dev/null || true
+        php artisan view:clear 2>/dev/null || true
+        php artisan cache:clear 2>/dev/null || true
+        
         # Run migrations
-        echo "=== RUNNING MIGRATIONS ==="
+        echo "=== Running database migrations ==="
         php artisan migrate --force || {
             echo "ERROR: Migration failed!"
             exit 1
         }
         echo "✓ Migrations completed"
         
-        # Recache everything
-        echo "Rebuilding caches..."
-        php artisan config:cache || true
-        php artisan route:cache || true
-        php artisan view:cache || true
+        # Cache configurations for performance
+        echo "Caching configurations..."
+        php artisan config:cache 2>/dev/null || true
+        php artisan route:cache 2>/dev/null || true
+        php artisan view:cache 2>/dev/null || true
     fi
+    
+    # Build frontend assets
+    if [ -f "/var/www/html/package.json" ]; then
+        echo "=== Building frontend assets ==="
+        bun install --frozen-lockfile && bun run build || {
+            echo "WARNING: Frontend build failed, continuing..."
+        }
+        echo "✓ Frontend assets built"
+    fi
+    
+    # Set proper permissions (do this last)
+    echo "Setting final permissions..."
+    chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
+    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
     
     # Mark container as initialized
     touch /tmp/.container_initialized
-    echo "=== UPDATE PROCEDURES COMPLETED ==="
+    echo "=== INITIALIZATION COMPLETED ==="
 else
-    echo "Container already initialized, skipping update procedures"
+    echo "Container already initialized, skipping setup procedures"
 fi
 
-echo "=== STARTING MAIN APPLICATION ==="
-# Execute the main start script
+echo "=== STARTING APPLICATION SERVICES ==="
+# Execute the service launcher
 exec /start.sh
