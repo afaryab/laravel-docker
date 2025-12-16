@@ -79,3 +79,6 @@ if [ "${FORCE_UPDATE:-false}" = "true" ] || [ ! -f "/tmp/.container_initialized"
 else
     echo "Container already initialized, skipping setup procedures"
 fi
+
+# Always start supervised services (nginx, php-fpm, sshd, etc.)
+exec /start.sh

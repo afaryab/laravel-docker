@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
-    container_name: app
+    # container_name: app
     ports:
       - "80:80"
     volumes:
@@ -19,7 +19,7 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile.cron
-    container_name: cron
+    # container_name: cron
     volumes:
       - .:/var/www/html
     networks:
@@ -32,7 +32,7 @@ services:
   mailtrap:
     image: mailhog/mailhog
     platform: linux/amd64
-    container_name: mailtrap
+    # container_name: mailtrap
     ports:
       - "1025:1025"
       - "8025:8025"
@@ -42,7 +42,7 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: redis
+    # container_name: redis
     networks:
       - server_manager
     restart: unless-stopped
@@ -71,7 +71,7 @@ services:
 
   pma:
     image: phpmyadmin/phpmyadmin
-    container_name: pma
+    # container_name: pma
     environment:
       PMA_HOST: db
       PMA_USER: laravel
@@ -84,7 +84,7 @@ services:
 
   soketi:
     image: 'quay.io/soketi/soketi:1.4-16-alpine'
-    container_name: soketi
+    # container_name: soketi
     environment:
       SOKETI_DEBUG: '1'
       SOKETI_METRICS_SERVER_PORT: '9601'
