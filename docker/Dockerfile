@@ -1,4 +1,4 @@
-FROM php:8.3-fpm-alpine
+FROM php:8.3-fpm-alpine3.20
 
 # Install system dependencies
 RUN apk add --no-cache \

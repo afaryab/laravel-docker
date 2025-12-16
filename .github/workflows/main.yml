@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
     
   calculate_version:
@@ -102,6 +106,7 @@ jobs:
         with:
           context: .
           file: ./docker/Dockerfile
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:${{ env.VERSION_NO_V }}
@@ -133,6 +138,7 @@ jobs:
         with:
           context: .
           file: ./docker/Dockerfile.cron
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:${{ env.VERSION_NO_V }}-cron
