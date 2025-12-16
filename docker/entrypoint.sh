@@ -79,7 +79,3 @@ if [ "${FORCE_UPDATE:-false}" = "true" ] || [ ! -f "/tmp/.container_initialized"
 else
     echo "Container already initialized, skipping setup procedures"
 fi
-
-echo "=== STARTING APPLICATION SERVICES ==="
-# Execute the service launcher
-exec /start.sh

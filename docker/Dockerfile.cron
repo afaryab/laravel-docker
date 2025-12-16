@@ -58,12 +58,11 @@ WORKDIR /var/www/html
 COPY . /var/www/html
 
 # Copy configurations
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/supervisord-cron.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/start.sh /start.sh
-COPY docker/entrypoint.sh /entrypoint.sh
 
 # Make scripts executable
-RUN chmod +x /start.sh /entrypoint.sh
+RUN chmod +x /start.sh
 
 # Create required directories and set permissions before composer install
 RUN mkdir -p /var/www/html/bootstrap/cache /var/www/html/storage/app /var/www/html/storage/framework/cache /var/www/html/storage/framework/sessions /var/www/html/storage/framework/views /var/www/html/storage/logs
@@ -93,5 +92,5 @@ RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null
 # Create log directories
 RUN mkdir -p /var/log/supervisor
 
-# Start with entrypoint that handles updates, then delegates to start.sh
-CMD ["/bin/sh", "/entrypoint.sh"]
+# Start with start.sh
+CMD ["/bin/sh", "/start.sh"]
