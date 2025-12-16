@@ -1,5 +1,7 @@
 FROM php:8.3-fpm-alpine3.20
 
+RUN apk add --no-cache busybox && busybox --install /bin
+
 # Install system dependencies
 RUN apk add --no-cache \
     git \
