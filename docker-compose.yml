@@ -15,6 +15,20 @@ services:
       - redis
     restart: unless-stopped
 
+  cron:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.cron
+    container_name: cron
+    volumes:
+      - .:/var/www/html
+    networks:
+      - server_manager
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+
   mailtrap:
     image: mailhog/mailhog
     platform: linux/amd64
