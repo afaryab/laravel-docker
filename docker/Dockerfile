@@ -1,7 +1,7 @@
 FROM php:8.3-fpm-alpine
 
-# Install system dependencies
-RUN apk add --no-cache \
+# Update package index and install system dependencies
+RUN apk update && apk add --no-cache \
     git \
     curl \
     libpng-dev \
@@ -26,10 +26,8 @@ RUN apk add --no-cache \
     dcron \
     nodejs \
     npm \
-    netcat-openbsd
-
-# Clear cache
-RUN rm -rf /var/lib/apt/lists/*
+    netcat-openbsd \
+    && rm -rf /var/cache/apk/*
 
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
