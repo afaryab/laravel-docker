@@ -1,18 +1,20 @@
-FROM php:8.4-fpm-alpine
+FROM php:8.4-fpm
 
 # Install system dependencies
-RUN apk add --no-cache \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     curl \
+    ca-certificates \
+    gnupg2 \
     libpng-dev \
     libxml2-dev \
     zip \
     bash \
     unzip \
-    oniguruma-dev \
-    icu-dev \
-    freetype-dev \
-    libjpeg-turbo-dev \
+    libonig-dev \
+    libicu-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
     libzip-dev \
     supervisor \
     openssh-server \
@@ -23,12 +25,19 @@ RUN apk add --no-cache \
     gcc \
     g++ \
     make \
-    dcron \
+    cron \
     nodejs \
-    npm
+    npm \
+    unixodbc-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Clear cache
-RUN rm -rf /var/lib/apt/lists/*
+# Install Microsoft ODBC driver for SQL Server
+RUN set -e; \
+    curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /usr/share/keyrings/microsoft.gpg; \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/debian/12/prod bookworm main" > /etc/apt/sources.list.d/microsoft-prod.list; \
+    apt-get update; \
+    ACCEPT_EULA=Y apt-get install -y --no-install-recommends msodbcsql18; \
+    rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
@@ -38,8 +47,9 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd intl zip
 RUN pecl install redis && docker-php-ext-enable redis
 
 # Install sqlsrv
-RUN docker-php-ext-enable sqlsrv pdo_sqlsrv;
-RUN rm -rf /var/lib/apt/lists/* /tmp/pear 
+RUN pecl install sqlsrv pdo_sqlsrv \
+    && docker-php-ext-enable sqlsrv pdo_sqlsrv \
+    && rm -rf /tmp/pear
 
 # Copy custom PHP configuration
 COPY docker/app/php.ini /usr/local/etc/php/conf.d/custom-php.ini
@@ -57,7 +67,7 @@ RUN sed -i 's/;listen.mode = 0660/listen.mode = 0660/' /usr/local/etc/php-fpm.d/
 WORKDIR /var/www/html
 
 # Configure nginx user and directories
-RUN adduser -D -s /bin/sh nginx nginx || true
+RUN useradd -r -s /usr/sbin/nologin nginx || true
 RUN mkdir -p /var/log/nginx /var/lib/nginx/tmp /var/cache/nginx
 RUN chown -R nginx:nginx /var/log/nginx /var/lib/nginx /var/cache/nginx
 RUN chmod -R 755 /var/log/nginx /var/lib/nginx /var/cache/nginx
