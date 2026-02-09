@@ -56,7 +56,7 @@ COPY docker/cron/php.ini /usr/local/etc/php/conf.d/custom-php.ini
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Configure SSH
-RUN mkdir /var/run/sshd
+RUN mkdir -p /var/run/sshd
 RUN echo 'root:root' | chpasswd
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN ssh-keygen -A
