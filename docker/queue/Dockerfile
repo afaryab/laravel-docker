@@ -35,6 +35,10 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd intl zip
 # Install Redis extension using PECL
 RUN pecl install redis && docker-php-ext-enable redis
 
+# Install sqlsrv
+RUN docker-php-ext-enable sqlsrv pdo_sqlsrv;
+RUN rm -rf /var/lib/apt/lists/* /tmp/pear 
+
 # Copy custom PHP configuration
 COPY docker/queue/php.ini /usr/local/etc/php/conf.d/custom-php.ini
 

@@ -38,7 +38,7 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd intl zip
 RUN pecl install redis && docker-php-ext-enable redis
 
 # Install sqlsrv
-RUN pecl install sqlsrv pdo_sqlsrv;
+RUN docker-php-ext-enable sqlsrv pdo_sqlsrv;
 RUN rm -rf /var/lib/apt/lists/* /tmp/pear 
 
 # Copy custom PHP configuration
