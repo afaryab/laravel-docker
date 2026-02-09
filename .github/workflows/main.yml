@@ -108,8 +108,8 @@ jobs:
           file: ./docker/Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:8.3-${{ env.VERSION_NO_V }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:8.3-latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:8.4-${{ env.VERSION_NO_V }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:8.4-latest
 
   cron_publish:
     needs: [calculate_version, version_release]
@@ -139,5 +139,5 @@ jobs:
           file: ./docker/Dockerfile.cron
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:8.3-${{ env.VERSION_NO_V }}-cron
-            ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:8.3-latest-cron
+            ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:8.4-${{ env.VERSION_NO_V }}-cron
+            ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:8.4-latest-cron

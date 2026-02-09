@@ -1,4 +1,4 @@
-FROM php:8.3-fpm-alpine3.20
+FROM php:8.4-fpm-alpine
 
 # Install system dependencies
 RUN apk add --no-cache \
@@ -16,8 +16,6 @@ RUN apk add --no-cache \
     libzip-dev \
     supervisor \
     openssh-server \
-    openssh-client \
-    nginx \
     apache2-utils \
     autoconf \
     gcc \
@@ -25,8 +23,7 @@ RUN apk add --no-cache \
     make \
     dcron \
     nodejs \
-    npm \
-    netcat-openbsd
+    npm
 
 # Clear cache
 RUN rm -rf /var/lib/apt/lists/*
@@ -37,6 +34,9 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd intl zip
 
 # Install Redis extension using PECL
 RUN pecl install redis && docker-php-ext-enable redis
+
+# Copy custom PHP configuration
+COPY docker/queue/php.ini /usr/local/etc/php/conf.d/custom-php.ini
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -56,27 +56,15 @@ RUN sed -i 's/;listen.mode = 0660/listen.mode = 0660/' /usr/local/etc/php-fpm.d/
 # Set working directory
 WORKDIR /var/www/html
 
-# Configure nginx user and directories
-RUN adduser -D -s /bin/sh nginx nginx || true
-RUN mkdir -p /var/log/nginx /var/lib/nginx/tmp /var/cache/nginx
-RUN chown -R nginx:nginx /var/log/nginx /var/lib/nginx /var/cache/nginx
-RUN chmod -R 755 /var/log/nginx /var/lib/nginx /var/cache/nginx
-
 # Copy application files
 COPY . /var/www/html
 
 # Copy configurations
-COPY docker/nginx.conf /etc/nginx/nginx.conf
-COPY docker/default.conf /etc/nginx/conf.d/default.conf
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY docker/start.sh /start.sh
-COPY docker/entrypoint.sh /entrypoint.sh
+COPY docker/queue/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/queue/start.sh /start.sh
 
-# Create .htpasswd file
-RUN touch /etc/nginx/.htpasswd
-
-# Make scripts executable
-RUN chmod +x /start.sh /entrypoint.sh
+# Make start script executable
+RUN chmod +x /start.sh
 
 # Create required directories and set permissions before composer install
 RUN mkdir -p /var/www/html/bootstrap/cache /var/www/html/storage/app /var/www/html/storage/framework/cache /var/www/html/storage/framework/sessions /var/www/html/storage/framework/views /var/www/html/storage/logs
@@ -90,7 +78,8 @@ RUN curl -fsSL https://bun.sh/install | bash && \
 # RUN bun run build
 RUN cp .env.example .env || true
 # Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN git config --global --add safe.directory /var/www/html
+RUN composer install --no-dev --optimize-autoloader || true
 
 # Generate Laravel application key if .env exists
 RUN if [ -f .env ]; then php artisan key:generate --force; fi
@@ -104,10 +93,10 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
 
 # Create log directories
-RUN mkdir -p /var/log/supervisor /var/log/nginx
+RUN mkdir -p /var/log/supervisor
 
 # Expose ports
-EXPOSE 80 443 22 9000
+EXPOSE 22
 
-# Start with entrypoint that handles updates, then delegates to start.sh
-CMD ["/bin/sh", "/entrypoint.sh"]
+# Start supervisor which will manage all services
+CMD ["/bin/sh", "/start.sh"]

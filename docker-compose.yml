@@ -2,12 +2,14 @@ services:
   app:
     build:
       context: .
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/app/Dockerfile
     # container_name: app
     ports:
       - "80:80"
     volumes:
       - .:/var/www/html
+      - ./docker/app/default.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/app/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
     networks:
       - server_manager
     depends_on:
@@ -18,10 +20,26 @@ services:
   cron:
     build:
       context: .
-      dockerfile: docker/Dockerfile.cron
+      dockerfile: docker/cron/Dockerfile
     # container_name: cron
     volumes:
       - .:/var/www/html
+      - ./docker/cron/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+    networks:
+      - server_manager
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+
+  queue:
+    build:
+      context: .
+      dockerfile: docker/queue/Dockerfile
+    # container_name: queue
+    volumes:
+      - .:/var/www/html
+      - ./docker/queue/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
     networks:
       - server_manager
     depends_on:
