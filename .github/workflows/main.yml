@@ -106,7 +106,6 @@ jobs:
         with:
           context: .
           file: ./docker/Dockerfile
-          platforms: linux/amd64,linux/arm64
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:8.3-${{ env.VERSION_NO_V }}
@@ -138,7 +137,6 @@ jobs:
         with:
           context: .
           file: ./docker/Dockerfile.cron
-          platforms: linux/amd64,linux/arm64
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:8.3-${{ env.VERSION_NO_V }}-cron
