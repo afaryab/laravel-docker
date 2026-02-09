@@ -109,8 +109,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:${{ env.VERSION_NO_V }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:8.3-${{ env.VERSION_NO_V }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:8.3-latest
 
   cron_publish:
     needs: [calculate_version, version_release]
@@ -141,5 +141,5 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:${{ env.VERSION_NO_V }}-cron
-            ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:latest-cron
+            ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:8.3-${{ env.VERSION_NO_V }}-cron
+            ${{ secrets.DOCKERHUB_USERNAME }}/laravel-12:8.3-latest-cron
